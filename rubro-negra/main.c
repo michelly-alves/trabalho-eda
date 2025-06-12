@@ -10,7 +10,7 @@ typedef struct Node {
     struct Node *left, *right, *parent;
 } Node;
 
-// Criação de novo nó (inicia como vermelho)
+
 Node* newNode(int key) {
     Node* node = (Node*)malloc(sizeof(Node));
     node->key = key;
@@ -19,7 +19,6 @@ Node* newNode(int key) {
     return node;
 }
 
-// Rotação à esquerda
 Node* rotateLeft(Node* root, Node* x) {
     Node* y = x->right;
     x->right = y->left;
@@ -36,7 +35,6 @@ Node* rotateLeft(Node* root, Node* x) {
     return root;
 }
 
-// Rotação à direita
 Node* rotateRight(Node* root, Node* y) {
     Node* x = y->left;
     y->left = x->right;
@@ -53,25 +51,21 @@ Node* rotateRight(Node* root, Node* y) {
     return root;
 }
 
-// Corrige a árvore após inserção
 Node* fixInsert(Node* root, Node* z) {
     while (z->parent && z->parent->color == RED) {
         Node* gp = z->parent->parent;
         if (z->parent == gp->left) {
             Node* uncle = gp->right;
             if (uncle && uncle->color == RED) {
-                // Caso 1: tio vermelho
                 z->parent->color = BLACK;
                 uncle->color = BLACK;
                 gp->color = RED;
                 z = gp;
             } else {
                 if (z == z->parent->right) {
-                    // Caso 2: rotação esquerda
                     z = z->parent;
                     root = rotateLeft(root, z);
                 }
-                // Caso 3: rotação direita
                 z->parent->color = BLACK;
                 gp->color = RED;
                 root = rotateRight(root, gp);
@@ -79,18 +73,15 @@ Node* fixInsert(Node* root, Node* z) {
         } else {
             Node* uncle = gp->left;
             if (uncle && uncle->color == RED) {
-                // Caso 1 espelhado
                 z->parent->color = BLACK;
                 uncle->color = BLACK;
                 gp->color = RED;
                 z = gp;
             } else {
                 if (z == z->parent->left) {
-                    // Caso 2 espelhado
                     z = z->parent;
                     root = rotateRight(root, z);
                 }
-                // Caso 3 espelhado
                 z->parent->color = BLACK;
                 gp->color = RED;
                 root = rotateLeft(root, gp);
@@ -101,13 +92,11 @@ Node* fixInsert(Node* root, Node* z) {
     return root;
 }
 
-// Inserção padrão de BST com correção Rubro-Negra
 Node* insert(Node* root, int key) {
     Node* z = newNode(key);
     Node* y = NULL;
     Node* x = root;
 
-    // Inserção tipo BST
     while (x != NULL) {
         y = x;
         if (z->key < x->key)
@@ -115,7 +104,7 @@ Node* insert(Node* root, int key) {
         else if (z->key > x->key)
             x = x->right;
         else
-            return root; // duplicado
+            return root; 
     }
 
     z->parent = y;
@@ -126,11 +115,9 @@ Node* insert(Node* root, int key) {
     else
         y->right = z;
 
-    // Corrige árvore Rubro-Negra
     return fixInsert(root, z);
 }
 
-// Impressão da árvore (pré-ordem, hierárquica)
 void printTree(Node* root, int space) {
     if (!root) return;
     space += 5;
@@ -140,7 +127,6 @@ void printTree(Node* root, int space) {
     printTree(root->left, space);
 }
 
-// Libera memória
 void freeTree(Node* root) {
     if (!root) return;
     freeTree(root->left);
@@ -148,7 +134,6 @@ void freeTree(Node* root) {
     free(root);
 }
 
-// Função principal
 int main() {
     int seq[] = {40, 20, 10, 25, 30, 50, 60, 70, 65};
     int n = sizeof(seq) / sizeof(seq[0]);
