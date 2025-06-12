@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+//avemaria
 typedef struct Node {
     int key;
     int height;
